@@ -271,39 +271,75 @@ class main:
         self.option3_window.title('Edit Rank')
 
         self.label = tkinter.Label(self.option3_window, text='Enter new cadet rank').grid(row=1, column=1)
+        self.new = tkinter.Entry(self.option3_window)
+        self.new.grid(row=1, column=2)
 
-        self.edit = tkinter.Entry(self.option3_window).grid(row=1, column=2)
+        self.label_edit = tkinter.Label(self.option3_window, text="Enter the cadet's CAPID")
+        self.label_edit.grid(row=2, column=1)
+
+        self.ID = tkinter.Entry(self.option3_window)
+        self.ID.grid(row=2, column=2)
 
         self.back = tkinter.Button(self.option3_window, text='Back',
-                                   command=self.option3_window.destroy).grid(row=2, column=1)
+                                   command=self.option3_window.destroy).grid(row=3, column=1)
         self.Finish = tkinter.Button(self.option3_window, text='Finish',
-                                     command=self.option3_finish).grid(row=2, column=1)
+                                     command=self.option3_finish).grid(row=3, column=2)
 
     def option3_finish(self):
-        pass
-        self.option3_window.destroy()
+        global cur
+        global conn
+
+        ID = self.ID.get()
+        new = self.new.get()
+
+        if tk.messagebox.askokcancel('Warning, editing this information',
+                                     'By clicking OK, this information will be permanently'
+                                     ' changed. This action cannot be undone.'):
+            value = new, ID
+            sql = "UPDATE CADETS SET RANK = ? WHERE CAPID = ?"
+            cur.execute(sql, value)
+            conn.commit()
+            cur.close()
+            conn.close()
+            self.option3_window.destroy()
 
     def option4(self):
         self.option4_window = tkinter.Tk()
         self.option4_window.title('Edit Cadet CAPID')
 
         self.label = tkinter.Label(self.option4_window, text='Enter new cadet CAPID').grid(row=1, column=1)
+        self.new = tkinter.Entry(self.option4_window)
+        self.new.grid(row=1, column=2)
 
-        self.edit = tkinter.Entry(self.option4_window).grid(row=1, column=2)
+        self.label_edit = tkinter.Label(self.option4_window, text="Enter the cadet's old CAPID")
+        self.label_edit.grid(row=2, column=1)
+
+        self.ID = tkinter.Entry(self.option4_window)
+        self.ID.grid(row=2, column=2)
+
 
         self.back = tkinter.Button(self.option4_window, text='Back',
-                                   command=self.option4_window.destroy).grid(row=2, column=1)
+                                   command=self.option4_window.destroy).grid(row=3, column=1)
         self.Finish = tkinter.Button(self.option4_window, text='Finish',
-                                     command=self.option4_finish).grid(row=2, column=1)
+                                     command=self.option4_finish).grid(row=3, column=2)
 
     def option4_finish(self):
-        pass
-        self.option4_window.destroy()
+        global cur
+        global conn
 
-    def edit_final(self):
-        tk.messagebox.askokcancel('Warming, editing the information', 'By clicking OK this information will be '
-                                                                      'permanently changed')
-        self.edit_window.destroy()
+        ID = self.ID.get()
+        new = self.new.get()
+
+        if tk.messagebox.askokcancel('Warning, editing this information',
+                                     'By clicking OK, this information will be permanently'
+                                     ' changed. This action cannot be undone.'):
+            value = new, ID
+            sql = "UPDATE CADETS SET CAPID = ? WHERE CAPID = ?"
+            cur.execute(sql, value)
+            conn.commit()
+            cur.close()
+            conn.close()
+            self.option4_window.destroy()
 
     def print_roster(self):
         # Create roster window
@@ -316,6 +352,14 @@ class main:
 
         # Create label
         self.label = tkinter.Label(self.roster_window, text='Here is the cadet roster').grid(row=1, column=2)
+
+        results = cur.fetchall()
+        for row in results:
+            tkinter.Label(self.roster_window, text=row)
+        conn.commit()
+
+        #for row in cur.execute("SELECT * FROM CADETS"):
+       # row = tkinter.Label(self.roster_window, cur.execute("SELECT * FROM CADETS")).grid()
 
         # Create buttons
         self.back = tkinter.Button(self.roster_window, text='Back',
