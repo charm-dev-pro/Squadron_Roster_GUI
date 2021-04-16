@@ -27,7 +27,7 @@ class main:
         self.print_roster = tkinter.Button(self.main_frame, text='Print Roster',
                                            command=self.print_roster)
         self.quit = tkinter.Button(self.main_frame, text='Quit',
-                                   command=self.main_window.destroy)
+                                   command=self.quit)
 
         # Create label
         self.label1 = tkinter.Label(self.main_window, text='Choose one of the following options')
@@ -42,6 +42,12 @@ class main:
         self.quit.grid(row=6, column=2)
 
         tkinter.mainloop()
+
+    # Create a function that ends the program
+    def quit(self):
+        cur.close()
+        conn.close()
+        self.main_window.destroy()
 
     def add_cadet(self):
 
@@ -82,24 +88,24 @@ class main:
 
 
     def add_finish(self):
+
         global cur
         global conn
-
+        # Get data info
         first = self.first.get()
         last = self.last.get()
         rank = self.rank.get()
         CAPID = self.ID.get()
-        full = last + ', ' + first
 
+        # Give the user a warning
         if tk.messagebox.askokcancel('Warning, adding the cadet to the database',
                                   'Check to make sure that all the data has been entered '
                                   'correctly; if all data is correct click OK.'):
+        # Add to database
             sql = "INSERT INTO CADETS (CAPID, FIRST_NAME, LAST_NAME, RANK) VALUES (?,?,?,?)"
             values = CAPID, first, last, rank
             cur.execute(sql, values)
             conn.commit()
-            cur.close()
-            conn.close()
             self.add_window.destroy()
 
     def remove_cadet(self):
@@ -119,7 +125,6 @@ class main:
 
         self.ID = tkinter.Entry(self.remove_window)
         self.ID.grid(row=3, column=3)
-       # self.ID = tkinter.Entry(self.remove_window).grid(row=3, column=3)
 
         # Create buttons
         self.back = tkinter.Button(self.remove_window, text='Back',
@@ -131,17 +136,18 @@ class main:
         global cur
         global conn
 
+        # Get ingo
         ID = self.ID.get()
 
+        # Send the user a warning
         if tk.messagebox.askokcancel('Warning, removing cadet from the database',
                                   'By clicking OK, this cadet will be permanently'
                                   ' removed from the roster. This action cannot be undone.'):
+            # Add to database
             value = ID
             sql = "DELETE from CADETS where CAPID = ?"
             cur.execute(sql, (value,))
             conn.commit()
-            cur.close()
-            conn.close()
             self.remove_window.destroy()
 
     def edit_cadet(self):
@@ -190,10 +196,10 @@ class main:
                                    command=self.edit_2_window.destroy).grid(row=6, column=1)
 
     def option1(self):
-        #self.ID2 = (self.ID.get())
+        # Create window
         self.option1_window = tkinter.Tk()
         self.option1_window.title('Edit Last Name')
-
+        # Create labels an get info
         self.label = tkinter.Label(self.option1_window, text='Enter new cadet last name').grid(row=1, column=1)
         self.new = tkinter.Entry(self.option1_window)
         self.new.grid(row=1, column=2)
@@ -203,7 +209,7 @@ class main:
 
         self.ID = tkinter.Entry(self.option1_window)
         self.ID.grid(row=2, column=2)
-
+        # Create buttons
         self.back = tkinter.Button(self.option1_window, text='Back',
                                    command=self.option1_window.destroy).grid(row=3, column=1)
         self.Finish = tkinter.Button(self.option1_window, text='Finish',
@@ -212,26 +218,25 @@ class main:
     def option1_finish(self):
         global cur
         global conn
-
+        # Get info
         ID = self.ID.get()
         new = self.new.get()
-
+        # Send the user a warning
         if tk.messagebox.askokcancel('Warning, editing this information',
                                      'By clicking OK, this information will be permanently'
                                      ' changed. This action cannot be undone.'):
-
+            # Add to database
             value = new, ID
             sql = "UPDATE CADETS SET LAST_NAME = ? WHERE CAPID = ?"
             cur.execute(sql, value)
             conn.commit()
-            cur.close()
-            conn.close()
             self.option1_window.destroy()
 
     def option2(self):
+        # Create window
         self.option2_window = tkinter.Tk()
         self.option2_window.title('Edit First Name')
-
+        # Create labels and get info
         self.label = tkinter.Label(self.option2_window, text='Enter new cadet first name').grid(row=1, column=1)
         self.new = tkinter.Entry(self.option2_window)
         self.new.grid(row=1, column=2)
@@ -242,6 +247,7 @@ class main:
         self.ID = tkinter.Entry(self.option2_window)
         self.ID.grid(row=2, column=2)
 
+        # Create buttons
         self.back = tkinter.Button(self.option2_window, text='Back',
                                    command=self.option2_window.destroy).grid(row=3, column=1)
         self.Finish = tkinter.Button(self.option2_window, text='Finish',
@@ -250,26 +256,25 @@ class main:
     def option2_finish(self):
         global cur
         global conn
-
+        # Get info
         ID = self.ID.get()
         new = self.new.get()
-
+        # Send user a warning
         if tk.messagebox.askokcancel('Warning, editing this information',
                                      'By clicking OK, this information will be permanently'
                                      ' changed. This action cannot be undone.'):
-
+            # Add to database
             value = new, ID
             sql = "UPDATE CADETS SET FIRST_NAME = ? WHERE CAPID = ?"
             cur.execute(sql, value)
             conn.commit()
-            cur.close()
-            conn.close()
             self.option2_window.destroy()
 
     def option3(self):
+        # Create window
         self.option3_window = tkinter.Tk()
         self.option3_window.title('Edit Rank')
-
+        # Create labels and get info
         self.label = tkinter.Label(self.option3_window, text='Enter new cadet rank').grid(row=1, column=1)
         self.new = tkinter.Entry(self.option3_window)
         self.new.grid(row=1, column=2)
@@ -279,7 +284,7 @@ class main:
 
         self.ID = tkinter.Entry(self.option3_window)
         self.ID.grid(row=2, column=2)
-
+        # Create buttons
         self.back = tkinter.Button(self.option3_window, text='Back',
                                    command=self.option3_window.destroy).grid(row=3, column=1)
         self.Finish = tkinter.Button(self.option3_window, text='Finish',
@@ -288,25 +293,25 @@ class main:
     def option3_finish(self):
         global cur
         global conn
-
+        # Get info
         ID = self.ID.get()
         new = self.new.get()
-
+        # Send user a warning
         if tk.messagebox.askokcancel('Warning, editing this information',
                                      'By clicking OK, this information will be permanently'
                                      ' changed. This action cannot be undone.'):
+            # Add to database
             value = new, ID
             sql = "UPDATE CADETS SET RANK = ? WHERE CAPID = ?"
             cur.execute(sql, value)
             conn.commit()
-            cur.close()
-            conn.close()
             self.option3_window.destroy()
 
     def option4(self):
+        # Create window
         self.option4_window = tkinter.Tk()
         self.option4_window.title('Edit Cadet CAPID')
-
+        # Create label and get info
         self.label = tkinter.Label(self.option4_window, text='Enter new cadet CAPID').grid(row=1, column=1)
         self.new = tkinter.Entry(self.option4_window)
         self.new.grid(row=1, column=2)
@@ -317,7 +322,7 @@ class main:
         self.ID = tkinter.Entry(self.option4_window)
         self.ID.grid(row=2, column=2)
 
-
+        # Create buttons
         self.back = tkinter.Button(self.option4_window, text='Back',
                                    command=self.option4_window.destroy).grid(row=3, column=1)
         self.Finish = tkinter.Button(self.option4_window, text='Finish',
@@ -326,33 +331,35 @@ class main:
     def option4_finish(self):
         global cur
         global conn
-
+        # Get info
         ID = self.ID.get()
         new = self.new.get()
-
+        # Send user a warning
         if tk.messagebox.askokcancel('Warning, editing this information',
                                      'By clicking OK, this information will be permanently'
                                      ' changed. This action cannot be undone.'):
+            # Add to database
             value = new, ID
             sql = "UPDATE CADETS SET CAPID = ? WHERE CAPID = ?"
             cur.execute(sql, value)
             conn.commit()
-            cur.close()
-            conn.close()
             self.option4_window.destroy()
 
     def print_roster(self):
+        global cur
+        global conn
         # Create roster window
         self.roster_window = tkinter.Tk()
         self.roster_window.title('Cadet Roster')
 
         # Create frames
-        self.top_frame = tkinter.Frame(self.roster_window)
-        self.bottom_frame = tkinter.Frame(self.roster_window)
+        self.top_framer = tkinter.Frame(self.roster_window).grid()
+        self.bottom_framer = tkinter.Frame(self.roster_window).grid()
 
         # Create label
-        self.label = tkinter.Label(self., text='Here is the cadet roster').grid(row=1, column=2)
+        self.label = tkinter.Label(self.roster_window, text='Here is the cadet roster').grid()
 
+        # Get info and write info
         cur.execute("SELECT * FROM CADETS")
         results = cur.fetchall()
         conn.commit()
@@ -361,19 +368,13 @@ class main:
             tkinter.Label(self.roster_window, text=f'First Name: {row[1]}').grid()
             tkinter.Label(self.roster_window, text=f'Last Name: {row[2]}').grid()
             tkinter.Label(self.roster_window, text=f'Rank: {row[3]}').grid()
-
-
-
-        #for row in cur.execute("SELECT * FROM CADETS"):
-       # row = tkinter.Label(self.roster_window, cur.execute("SELECT * FROM CADETS")).grid()
+            tkinter.Label(self.roster_window).grid()
 
         # Create buttons
-        self.back = tkinter.Button(self.roster_window, text='Back',
-                                   command=self.roster_window.destroy).grid(row=2, column=1)
         self.done = tkinter.Button(self.roster_window, text='Done',
                                    command=self.roster_window.destroy).grid(row=2, column=3)
 
-
+# Call the main class
 if __name__ == '__main__':
     main()
 
