@@ -351,12 +351,18 @@ class main:
         self.bottom_frame = tkinter.Frame(self.roster_window)
 
         # Create label
-        self.label = tkinter.Label(self.roster_window, text='Here is the cadet roster').grid(row=1, column=2)
+        self.label = tkinter.Label(self., text='Here is the cadet roster').grid(row=1, column=2)
 
+        cur.execute("SELECT * FROM CADETS")
         results = cur.fetchall()
-        for row in results:
-            tkinter.Label(self.roster_window, text=row)
         conn.commit()
+        for row in results:
+            tkinter.Label(self.roster_window, text=f'CAPID: {row[0]}').grid()
+            tkinter.Label(self.roster_window, text=f'First Name: {row[1]}').grid()
+            tkinter.Label(self.roster_window, text=f'Last Name: {row[2]}').grid()
+            tkinter.Label(self.roster_window, text=f'Rank: {row[3]}').grid()
+
+
 
         #for row in cur.execute("SELECT * FROM CADETS"):
        # row = tkinter.Label(self.roster_window, cur.execute("SELECT * FROM CADETS")).grid()

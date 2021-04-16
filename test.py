@@ -13,6 +13,15 @@ cur = conn.cursor()
     #print(row)
 
 #cur.execute("DELETE FROM CADETS WHERE CAPID = 11")
-for row in cur.execute("SELECT * FROM CADETS"):
-    print(row)
+#for row in cur.execute("SELECT * FROM CADETS"):
+    #print(row)
+
+cur.execute("SELECT * FROM CADETS")
+results = cur.fetchall()
+for row in results:
+    print('CAPID: ', row[0])
+    print('First Name: ', row[1])
+    print('Last Name: ', row[2])
+    print('Rank: ', row[3])
+    print('\n')
 
