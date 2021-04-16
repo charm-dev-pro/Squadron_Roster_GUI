@@ -220,12 +220,9 @@ class main:
                                      'By clicking OK, this information will be permanently'
                                      ' changed. This action cannot be undone.'):
 
-           # value1 = new
-            #value2 = ID
             value = new, ID
             sql = "UPDATE CADETS SET LAST_NAME = ? WHERE CAPID = ?"
             cur.execute(sql, value)
-            #cur.execute(sql, (value,))
             conn.commit()
             cur.close()
             conn.close()
@@ -236,17 +233,38 @@ class main:
         self.option2_window.title('Edit First Name')
 
         self.label = tkinter.Label(self.option2_window, text='Enter new cadet first name').grid(row=1, column=1)
+        self.new = tkinter.Entry(self.option2_window)
+        self.new.grid(row=1, column=2)
 
-        self.edit = tkinter.Entry(self.option2_window).grid(row=1, column=2)
+        self.label_edit = tkinter.Label(self.option2_window, text="Enter the cadet's CAPID")
+        self.label_edit.grid(row=2, column=1)
+
+        self.ID = tkinter.Entry(self.option2_window)
+        self.ID.grid(row=2, column=2)
 
         self.back = tkinter.Button(self.option2_window, text='Back',
-                                   command=self.option2_window.destroy).grid(row=2, column=1)
+                                   command=self.option2_window.destroy).grid(row=3, column=1)
         self.Finish = tkinter.Button(self.option2_window, text='Finish',
-                                     command=self.option2_finish).grid(row=2, column=1)
+                                     command=self.option2_finish).grid(row=3, column=2)
 
     def option2_finish(self):
-        pass
-        self.option2_window.destroy()
+        global cur
+        global conn
+
+        ID = self.ID.get()
+        new = self.new.get()
+
+        if tk.messagebox.askokcancel('Warning, editing this information',
+                                     'By clicking OK, this information will be permanently'
+                                     ' changed. This action cannot be undone.'):
+
+            value = new, ID
+            sql = "UPDATE CADETS SET FIRST_NAME = ? WHERE CAPID = ?"
+            cur.execute(sql, value)
+            conn.commit()
+            cur.close()
+            conn.close()
+            self.option2_window.destroy()
 
     def option3(self):
         self.option3_window = tkinter.Tk()
